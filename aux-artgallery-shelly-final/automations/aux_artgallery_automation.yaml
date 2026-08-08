@@ -1,0 +1,14 @@
+# AUX ArtGallery Automation
+
+Временная версия автоматизаций.
+
+Каналы:
+- SW1 HEAT
+- SW2 FAN
+- SW3 COOL
+- SW4 POWER
+
+Events:
+- single_push
+- double_push
+- long_push
