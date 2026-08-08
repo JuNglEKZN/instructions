@@ -5,7 +5,7 @@
 ## Умный дом и климат
 
 - [Подключение кондиционера AUX к Home Assistant через UMDU AC](aux-umdu-home-assistant/README.md)
-- [Настенное управление кондиционером: ArtGallery + Shelly i4 Gen3 + Home Assistant](aux-artgallery-shelly/README.md)
+- [Настенное управление кондиционером: ArtGallery + Shelly i4 Gen3 + Home Assistant](aux-artgallery-shelly-final)
 - [Подключение TION Бризер 4S к Home Assistant по Bluetooth](tion-4s-bluetooth-home-assistant/README.md)
 
 ## Кофейная техника
