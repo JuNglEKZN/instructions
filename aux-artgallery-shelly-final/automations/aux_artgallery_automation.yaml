@@ -1,14 +1,99 @@
-# AUX ArtGallery Automation
+alias: AUX ArtGallery Controller
 
-Временная версия автоматизаций.
+trigger:
+  - platform: event
+    event_type: shelly.click
 
-Каналы:
-- SW1 HEAT
-- SW2 FAN
-- SW3 COOL
-- SW4 POWER
+action:
+  - choose:
 
-Events:
-- single_push
-- double_push
-- long_push
+      # 🔥 HEAT
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 1 and
+                 trigger.event.data.click_type == 'single_push' }}
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: climate.aux_living_room
+            data:
+              temperature: >
+                {{ state_attr('climate.aux_living_room','temperature') | float + 1 }}
+
+
+      # ❄ COOL
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 3 and
+                 trigger.event.data.click_type == 'single_push' }}
+        sequence:
+          - service: climate.set_temperature
+            target:
+              entity_id: climate.aux_living_room
+            data:
+              temperature: >
+                {{ state_attr('climate.aux_living_room','temperature') | float - 1 }}
+
+
+      # ❄ Turbo Cool
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 3 and
+                 trigger.event.data.click_type == 'long_push' }}
+        sequence:
+          - service: script.aux_turbo_cool
+
+
+      # ≋ Fan
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 2 and
+                 trigger.event.data.click_type == 'single_push' }}
+        sequence:
+          - service: script.aux_cycle_fan
+
+
+      # ≋ Swing
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 2 and
+                 trigger.event.data.click_type == 'double_push' }}
+        sequence:
+          - service: script.aux_toggle_swing
+
+
+      # ⏻ Restore
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 4 and
+                 trigger.event.data.click_type == 'single_push' }}
+        sequence:
+          - service: script.aux_restore_comfort
+
+
+      # ⏻ Sleep
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 4 and
+                 trigger.event.data.click_type == 'double_push' }}
+        sequence:
+          - service: script.aux_sleep
+
+
+      # ⏻ OFF
+      - conditions:
+          - condition: template
+            value_template: >
+              {{ trigger.event.data.channel == 4 and
+                 trigger.event.data.click_type == 'long_push' }}
+        sequence:
+          - service: climate.turn_off
+            target:
+              entity_id: climate.aux_living_room
