@@ -1,8 +1,105 @@
-# AUX ArtGallery Scripts
+aux_restore_comfort:
+  alias: AUX Restore Comfort
+  mode: single
+  sequence:
+    - service: climate.turn_on
+      target:
+        entity_id: climate.aux_living_room
 
-script.aux_restore_comfort
-script.aux_turbo_cool
-script.aux_cycle_fan
-script.aux_toggle_swing
-script.aux_cycle_angle
-script.aux_sleep
+    - service: climate.set_hvac_mode
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        hvac_mode: cool
+
+    - service: climate.set_temperature
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        temperature: 23
+
+
+aux_turbo_cool:
+  alias: AUX Turbo Cool
+  mode: single
+  sequence:
+    - service: climate.set_hvac_mode
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        hvac_mode: cool
+
+    - service: climate.set_temperature
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        temperature: 20
+
+    - service: climate.set_fan_mode
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        fan_mode: high
+
+
+aux_cycle_fan:
+  alias: AUX Cycle Fan Speed
+  mode: single
+  sequence:
+    - choose:
+        - conditions:
+            - condition: state
+              entity_id: climate.aux_living_room
+              attribute: fan_mode
+              state: auto
+          sequence:
+            - service: climate.set_fan_mode
+              target:
+                entity_id: climate.aux_living_room
+              data:
+                fan_mode: low
+
+        - conditions:
+            - condition: state
+              entity_id: climate.aux_living_room
+              attribute: fan_mode
+              state: low
+          sequence:
+            - service: climate.set_fan_mode
+              target:
+                entity_id: climate.aux_living_room
+              data:
+                fan_mode: medium
+
+      default:
+        - service: climate.set_fan_mode
+          target:
+            entity_id: climate.aux_living_room
+          data:
+            fan_mode: auto
+
+
+aux_toggle_swing:
+  alias: AUX Toggle Swing
+  mode: single
+  sequence:
+    - service: climate.toggle_swing_mode
+      target:
+        entity_id: climate.aux_living_room
+
+
+aux_sleep:
+  alias: AUX Sleep Night Mode
+  mode: single
+  sequence:
+    - service: climate.set_temperature
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        temperature: 25
+
+    - service: climate.set_fan_mode
+      target:
+        entity_id: climate.aux_living_room
+      data:
+        fan_mode: low
